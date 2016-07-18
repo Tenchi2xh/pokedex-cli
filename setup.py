@@ -20,15 +20,15 @@ VERSION = get_version("pokedex/main.py")
 # readme_file.close()
 
 setup(
-    name="pokedex",
+    name="pokedex-cli",
     packages=find_packages(),
     version=VERSION,
     description="Pokédex CLI",
     #long_description=README,
     author="Tenchi",
     author_email="tenkage@gmail.com",
-    url="https://github.com/Tenchi2xh/pokedex",
-    download_url="https://github.com/Tenchi2xh/pokedex/tarball/" + VERSION,
+    url="https://github.com/Tenchi2xh/pokedex-cli",
+    download_url="https://github.com/Tenchi2xh/pokedex-cli/tarball/" + VERSION,
     keywords=["pokedex", "pokemon", "terminal", "cli"],
     classifiers=[
         "Development Status :: 4 - Beta",
