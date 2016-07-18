@@ -36,7 +36,7 @@ setup(
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5"
     ],
-    install_requires=["Pillow"],
+    install_requires=["Pillow", "requests", "progressbar2"],
     extras_require={
         "test": ["pytest"]
     },
