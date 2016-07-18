@@ -1,5 +1,6 @@
 .DS_Store
 *.pyc
+__pycache__
 pokedex/resources/*.sqlite
 pokedex/test.py
 TODO.md
