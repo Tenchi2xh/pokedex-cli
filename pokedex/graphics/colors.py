@@ -12,6 +12,8 @@ def format_fg(fg):
     return "\033[38;5;%dm" % fg
 
 def format_bg(bg):
+    if bg == -1:
+        return "\033[49m"
     return "\033[48;5;%dm" % bg
 
 def format_color(text, fg=15, bg=0):

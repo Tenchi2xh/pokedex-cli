@@ -12,16 +12,16 @@ class Buffer(object):
     def __init__(self, width=80, height=16):
         self.width = width
         self.height = height
-        self.buffer = [[Cell(" ", 15, 0) for x in range(width)] for y in range(height)]
+        self.buffer = [[Cell(" ", 15, -1) for x in range(width)] for y in range(height)]
 
-    def put_cell(self, position, character, fg=15, bg=0):
+    def put_cell(self, position, character, fg=15, bg=-1):
         x, y = position
-        assert x > 0
-        assert y > 0
+        assert x >= 0
+        assert y >= 0
         assert x < self.width
         assert y < self.height
 
-        assert type(character) is str
+        assert type(character) in (str, unicode)
         if len(character) == 0:
             character = " "
 
