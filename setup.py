@@ -32,9 +32,7 @@ setup(
     keywords=["pokedex", "pokemon", "terminal", "cli"],
     classifiers=[
         "Development Status :: 4 - Beta",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5"
+        "Programming Language :: Python :: 2.7"
     ],
     install_requires=["Pillow", "requests", "progressbar2", "click"],
     extras_require={
@@ -44,5 +42,8 @@ setup(
         "console_scripts": [
             "pokedex = pokedex.main:pokedex"
         ]
+    },
+    package_data={
+        "pokedex": ["resources/icons/*.png"] 
     }
 )
