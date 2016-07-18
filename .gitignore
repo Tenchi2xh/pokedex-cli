@@ -1,3 +1,5 @@
 .DS_Store
 *.pyc
 pokedex/resources/*.sqlite
+pokedex/test.py
+TODO.md
