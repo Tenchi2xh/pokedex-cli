@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from .colors import *
 
 import collections
 
 
-Cell = collections.namedtuple('Cell', 'character fg bg')
+Cell = collections.namedtuple("Cell", "character fg bg")
 
 
 class Buffer(object):
@@ -27,6 +28,11 @@ class Buffer(object):
 
         self.buffer[y][x] = Cell(character, fg, bg)
 
+    def put_line(self, position, line, fg=15, bg=-1):
+        x, y = position
+        for i, char in enumerate(line):
+            self.put_cell((x+i, y), char, fg, bg)
+
     def render(self):
         output = []
         for line in self.buffer:
@@ -45,3 +51,8 @@ class Buffer(object):
             output.append(result)
 
         return output
+
+    def display(self):
+        print()
+        for line in self.render():
+            print(line)

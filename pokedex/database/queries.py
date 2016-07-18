@@ -18,12 +18,33 @@ def get_versions():
                    """)
     return [row[0] for row in cursor.fetchall()]
 
+
+def get_types():
+    cursor.execute("""SELECT type_id, name
+                        FROM type_names
+                       WHERE type_id < 10000 AND local_language_id=9
+                   """)
+    return {row[0]: row[1].lower() for row in cursor.fetchall()}
+
+
 def get_pokemon_id(pokemon, language=default_language):
     try:
         pokemon_id = int(pokemon)
+        if pokemon_id <= 0 or pokemon_id > 721:
+            raise NoSuchPokemon("#%d" % pokemon_id)
         return pokemon_id
     except ValueError:
         return get_pokemon_by_name(pokemon, language=language)
+
+
+def get_pokemon_name(id, language=default_language):
+    cursor.execute("""SELECT name
+                        FROM pokemon_species_names s
+                        JOIN languages l ON l.identifier="{language}"
+                       WHERE s.local_language_id=l.id AND s.pokemon_species_id={id}
+                   """.format(id=id, language=language))
+    return cursor.fetchall()[0][0]
+
 
 def get_pokemon_by_name(name, language=default_language):
     cursor.execute("""SELECT p.species_id
@@ -38,8 +59,27 @@ def get_pokemon_by_name(name, language=default_language):
         raise NoSuchPokemon(name)
     return rows[0][0]
 
+
+def get_pokemon_type(pokemon_id):
+    all_types = get_types()
+    cursor.execute("""SELECT type_id, slot
+                        FROM pokemon_types
+                       WHERE pokemon_id={pokemon_id}
+                   """.format(pokemon_id=pokemon_id))
+    types = sorted([(row[0], int(row[1])) for row in cursor.fetchall()], key=lambda t: t[1])
+    return map(lambda t: all_types[t[0]], types)
+
+
+def get_pokemon_evolution_chain(pokemon_id, language=default_language):
+    cursor.execute("""SELECT id
+                        FROM pokemon_species
+                       WHERE evolution_chain_id = (SELECT evolution_chain_id FROM pokemon_species WHERE id={pokemon_id})
+                   """.format(pokemon_id=pokemon_id))
+    return [(row[0], get_pokemon_name(row[0], language)) for row in cursor.fetchall()]
+
+
 def get_pokedex_entry(id, language=default_language, version=default_version):
-    cursor.execute("""SELECT p.species_id, name, genus, flavor_text
+    cursor.execute("""SELECT p.species_id, name, genus, flavor_text, height, weight
                         FROM pokemon p
                         JOIN languages l ON l.identifier="{language}"
                         JOIN versions v ON v.identifier="{version}"
