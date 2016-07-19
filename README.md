@@ -27,8 +27,10 @@ Usage: pokedex [OPTIONS] POKEMON
   specified in the configured language.
 
 Options:
-  -l, --language LANGUAGE         Pokédex language to use
-  -pv, --pokedex-version VERSION  Pokédex version to use
+  -s, --shiny                     Show shiny version of the Pokémon.
+  -m, --mega                      Show Mega Evolution(s) if available.
+  -l, --language LANGUAGE         Pokédex language to use.
+  -pv, --pokedex-version VERSION  Pokédex version to use.
   --help                          Show this message and exit.
 ```
 
