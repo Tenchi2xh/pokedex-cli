@@ -120,10 +120,10 @@ def draw_evolutions(buffer, chain, index, x0=0, y0=0, bg=-1):
             offset += 3
 
 
-def draw_card(name, number, genus, types, desc, height, weight, chain, icon_path):
-    chain_ids, chain_names = zip(*chain)
+def draw_card(pokemon, shiny=False):
+    chain_ids, chain_names = zip(*pokemon.chain)
 
-    content_width = max([len(" > ".join(chain_names)) + 3, len(genus) + 3 + 8 + 12, 32])
+    content_width = max([len(" > ".join(chain_names)) + 3, len(pokemon.genus) + 3 + 8 + 12, 32])
 
     width = content_width + icon_width + 2
     buffer = Buffer(width + 1, 16)
@@ -131,18 +131,18 @@ def draw_card(name, number, genus, types, desc, height, weight, chain, icon_path
     for y in range(16):
         buffer.put_line((1, y), " " * width, bg=0)
 
-    draw_image(buffer, os.path.join(resource_path, icon_path), x0=content_width+1)
+    draw_image(buffer, os.path.join(resource_path, pokemon.icon(shiny)), x0=content_width+1)
 
-    buffer.put_line((3, 1), name, bg=0)
-    buffer.put_line((3, 2), u"%s Pokémon" % genus.capitalize(), fg=245, bg=0)
-    buffer.put_line((3, 3), "%0.2f m / %0.1f kg" % (height / 10.0, weight / 10.0), fg=240, bg=0)
+    buffer.put_line((3, 1), pokemon.name, bg=0)
+    buffer.put_line((3, 2), u"%s Pokémon" % pokemon.genus.capitalize(), fg=245, bg=0)
+    buffer.put_line((3, 3), "%0.2f m / %0.1f kg" % (pokemon.height / 10.0, pokemon.weight / 10.0), fg=240, bg=0)
 
-    type1 = types[0]
-    type2 = types[1] if len(types) > 1 else None
+    type1 = pokemon.types[0]
+    type2 = pokemon.types[1] if len(pokemon.types) > 1 else None
 
-    draw_number(buffer, number, bg=0, x0=content_width-12, y0=1)
+    draw_number(buffer, pokemon.number, bg=0, x0=content_width-12, y0=1)
     draw_type(buffer, type1, type2, x0=3, y0=5)
-    draw_flavor_text(buffer, desc, content_width - 3, x0=3, y0=7, bg=0)
-    draw_evolutions(buffer, chain, chain_names.index(name), x0=3, y0=13, bg=0)
+    draw_flavor_text(buffer, pokemon.flavor, content_width - 3, x0=3, y0=7, bg=0)
+    draw_evolutions(buffer, pokemon.chain, chain_names.index(pokemon.name), x0=3, y0=13, bg=0)
 
     return buffer
