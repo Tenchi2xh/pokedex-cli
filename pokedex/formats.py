@@ -7,7 +7,7 @@ from .graphics.cell_buffer import Buffer
 from .graphics.draw import *
 
 icon_width = 32
-
+format_names = ["card", "json", "simple", "line", "page"]
 
 def card(pokemon, shiny=False, mega=False):
     chain_ids, chain_names = zip(*pokemon.chain)

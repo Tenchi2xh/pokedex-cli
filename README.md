@@ -19,7 +19,7 @@ pip install "git+git://github.com/Tenchi2xh/pokedex-cli.git@v0.1.3#egg=pokedex-c
 
 ```
 $ pokedex --help
-Usage: pokedex [OPTIONS] POKEMON
+Usage: main.py [OPTIONS] POKEMON
 
   Command-line interface for a quick Pokédex reference.
 
@@ -31,6 +31,8 @@ Options:
   -m, --mega                      Show Mega Evolution(s) if available.
   -l, --language LANGUAGE         Pokédex language to use.
   -pv, --pokedex-version VERSION  Pokédex version to use.
+  -f, --format FORMAT             Output format (can be card, json, simple,
+                                  line, page).
   --help                          Show this message and exit.
 ```
 
