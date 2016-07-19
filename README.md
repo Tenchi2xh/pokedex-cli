@@ -1,3 +1,5 @@
+![](https://img.shields.io/github/tag/Tenchi2xh/pokedex-cli.svg)
+
 # Pokédex CLI
 
 The Pocket Monster Index, now in your terminal!
