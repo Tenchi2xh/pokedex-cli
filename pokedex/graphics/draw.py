@@ -120,18 +120,22 @@ def draw_evolutions(buffer, chain, index, x0=0, y0=0, bg=-1):
             offset += 3
 
 
-def draw_card(pokemon, shiny=False):
+def draw_card(pokemon, shiny=False, mega=False):
     chain_ids, chain_names = zip(*pokemon.chain)
 
     content_width = max([len(" > ".join(chain_names)) + 3, len(pokemon.genus) + 3 + 8 + 12, 32])
 
-    width = content_width + icon_width + 2
+    icons = pokemon.mega + 1 if mega else 1
+    total_icon_width = icons * icon_width
+
+    width = content_width + total_icon_width + 2
     buffer = Buffer(width + 1, 16)
 
     for y in range(16):
         buffer.put_line((1, y), " " * width, bg=0)
 
-    draw_image(buffer, os.path.join(resource_path, pokemon.icon(shiny)), x0=content_width+1)
+    for mega in range(icons):
+        draw_image(buffer, os.path.join(resource_path, pokemon.icon(shiny=shiny, mega=mega)), x0=content_width+1+icon_width*mega)
 
     buffer.put_line((3, 1), pokemon.name, bg=0)
     buffer.put_line((3, 2), u"%s Pokémon" % pokemon.genus.capitalize(), fg=245, bg=0)

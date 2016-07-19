@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 
+import os
+
 from .exceptions import *
 from .database.queries import *
 
@@ -31,5 +33,14 @@ class Pokemon(object):
             self.height = entry[4]
             self.weight = entry[5]
 
-    def icon(self, shiny=False):
-        return "icons/icon%03d%s.png" % (self.number, "s" if shiny else "")
+    def icon(self, shiny=False, mega=0):
+        mega_suffix = ["", "_mega", "_mega_1"][mega]
+        return "icons/icon%03d%s%s.png" % (self.number, "s" if shiny else "", mega_suffix)
+
+    @property
+    def mega(self):
+        if os.path.isfile(os.path.join(resource_path, self.icon(mega=2))):
+            return 2
+        if os.path.isfile(os.path.join(resource_path, self.icon(mega=1))):
+            return 1
+        return 0
