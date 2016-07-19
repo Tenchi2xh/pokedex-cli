@@ -12,7 +12,7 @@ The Pocket Monster Index, now in your terminal!
 ## Installation
 
 ```
-pip install git+git://github.com/Tenchi2xh/pokedex-cli.git@v0.1.1#egg=pokedex-cli
+pip install git+git://github.com/Tenchi2xh/pokedex-cli.git@v0.1.2#egg=pokedex-cli
 ```
 
 ## Usage
