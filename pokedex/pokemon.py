@@ -27,7 +27,7 @@ class Pokemon(object):
             self.number = entry[0]
             self.name   = entry[1]
             self.genus  = entry[2]
-            self.flavor = entry[3]
+            self.flavor = entry[3].replace("\n", " ").replace("\f", " ")
             self.types  = get_pokemon_type(self.number)
             self.chain  = get_pokemon_evolution_chain(self.number, language=language)
             self.height = entry[4]

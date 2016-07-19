@@ -7,7 +7,6 @@ from PIL import Image
 from .. import resource_path
 from .colors import rgb_to_xterm
 from .conversion import rgb2short
-from .cell_buffer import Buffer
 
 
 block_top = "▀"
@@ -68,8 +67,6 @@ type_colors = {
     "fairy":    int(rgb2short("D685AD")[0]),
 }
 
-icon_width = 32
-
 
 def draw_image(buffer, path, x0=0, y0=0):
     image = Image.open(path).convert("RGB")
@@ -102,7 +99,6 @@ def draw_type(buffer, type1, type2=None, x0=0, y0=0):
 
 def draw_flavor_text(buffer, text, width, x0=0, y0=0, fg=15, bg=-1):
     # Non-asian languages only!
-    sanitized = text.replace("\n", " ")
     lines = textwrap.fill(text, width=width).split("\n")
     for i, line in enumerate(lines):
         buffer.put_line((x0, y0 + i), line, fg, bg)
@@ -118,35 +114,3 @@ def draw_evolutions(buffer, chain, index, x0=0, y0=0, bg=-1):
         if i < len(chain) - 1:
             buffer.put_line((x0 + offset, y0 + 1), " > ", 33, bg)
             offset += 3
-
-
-def draw_card(pokemon, shiny=False, mega=False):
-    chain_ids, chain_names = zip(*pokemon.chain)
-
-    content_width = max([len(" > ".join(chain_names)) + 3, len(pokemon.genus) + 3 + 8 + 12, 32])
-
-    icons = pokemon.mega + 1 if mega else 1
-    total_icon_width = icons * icon_width
-
-    width = content_width + total_icon_width + 2
-    buffer = Buffer(width + 1, 16)
-
-    for y in range(16):
-        buffer.put_line((1, y), " " * width, bg=0)
-
-    for mega in range(icons):
-        draw_image(buffer, os.path.join(resource_path, pokemon.icon(shiny=shiny, mega=mega)), x0=content_width+1+icon_width*mega)
-
-    buffer.put_line((3, 1), pokemon.name, bg=0)
-    buffer.put_line((3, 2), u"%s Pokémon" % pokemon.genus.capitalize(), fg=245, bg=0)
-    buffer.put_line((3, 3), "%0.2f m / %0.1f kg" % (pokemon.height / 10.0, pokemon.weight / 10.0), fg=240, bg=0)
-
-    type1 = pokemon.types[0]
-    type2 = pokemon.types[1] if len(pokemon.types) > 1 else None
-
-    draw_number(buffer, pokemon.number, bg=0, x0=content_width-12, y0=1)
-    draw_type(buffer, type1, type2, x0=3, y0=5)
-    draw_flavor_text(buffer, pokemon.flavor, content_width - 3, x0=3, y0=7, bg=0)
-    draw_evolutions(buffer, pokemon.chain, chain_names.index(pokemon.name), x0=3, y0=13, bg=0)
-
-    return buffer

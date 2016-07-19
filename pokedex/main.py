@@ -5,8 +5,8 @@ from __future__ import print_function
 import click
 
 from .database.get import download_database
-from .graphics.draw import draw_card
 from .exceptions import *
+from . import formats
 
 __version__ = "0.1.3"
 
@@ -17,7 +17,8 @@ __version__ = "0.1.3"
 @click.option("-m", "--mega", is_flag=True, help=u"Show Mega Evolution(s) if available.")
 @click.option("-l", "--language", metavar="LANGUAGE", default="en", help=u"Pokédex language to use.")
 @click.option("-pv", "--pokedex-version", metavar="VERSION", default="x", help=u"Pokédex version to use.")
-def pokedex(pokemon, shiny, mega, language, pokedex_version):
+@click.option("-f", "--format", metavar="FORMAT", default="card", type=click.Choice(["card", "json", "simple", "line", "page"]), help="Output format.")
+def pokedex(pokemon, shiny, mega, language, pokedex_version, format):
     """Command-line interface for a quick Pokédex reference.
 
     Positional argument POKEMON can be either an id or a name, which has to be
@@ -26,8 +27,13 @@ def pokedex(pokemon, shiny, mega, language, pokedex_version):
     download_database()
     from .pokemon import Pokemon
 
-    buffer = draw_card(Pokemon(pokemon, language=language, version=pokedex_version), shiny=shiny, mega=mega)
-    buffer.display()
+    pkmn = Pokemon(pokemon, language=language, version=pokedex_version)
+    if format == "card":
+        formats.card(pkmn, shiny=shiny, mega=mega)
+    elif format == "page":
+        pass
+    else:
+        getattr(formats, format)(pkmn)
 
 if __name__ == "__main__":
     pokedex()
