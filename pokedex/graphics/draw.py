@@ -104,13 +104,35 @@ def draw_flavor_text(buffer, text, width, x0=0, y0=0, fg=15, bg=-1):
         buffer.put_line((x0, y0 + i), line, fg, bg)
 
 
-def draw_evolutions(buffer, chain, index, x0=0, y0=0, bg=-1):
-    offset = 0
-    for i, stage in enumerate(chain):
-        fg = 245 if i != index else 15
-        buffer.put_line((x0 + offset, y0), ("#%03d" % stage[0]).center(len(stage[1])), fg, bg)
-        buffer.put_line((x0 + offset, y0 + 1), stage[1], fg, bg)
-        offset += len(stage[1])
-        if i < len(chain) - 1:
-            buffer.put_line((x0 + offset, y0 + 1), " > ", 33, bg)
-            offset += 3
+def get_height(stage):
+    if len(stage) == 0:
+        return 2
+    return sum([get_height(stage[pkmn]) for pkmn in stage])
+
+
+def get_width(chain):
+    maximum = max(len(pkmn[1]) for pkmn in chain.keys()) if chain.keys() else 0
+    return maximum + max(get_width(stage) + 3 for stage in chain.values()) if chain.values() else 0
+
+
+def draw_evolutions(buffer, chain, number, x0=0, y0=0, bg=-1):
+
+    def draw(pkmn, evolutions, width, ox0, oy0):
+        if width == 0:
+            width = len(pkmn[1])
+        ox1 = len(pkmn[1])
+        fg = 245 if pkmn[0] != number else 15
+        buffer.put_line((x0 + ox0, y0 + oy0), ("#%03d" % pkmn[0]).center(width), fg, bg)
+        buffer.put_line((x0 + ox0, y0 + oy0 + 1), pkmn[1].center(width), fg, bg)
+        if len(evolutions) > 0:
+            buffer.put_line((x0 + ox0 + ox1, y0 + oy0 + 1), " > ", 33, bg)
+            ox1 += 3
+
+        last = 0
+        if evolutions:
+            longest = max(map(lambda p: len(p[1]), evolutions))
+            for oy1, e in enumerate(evolutions):
+                draw(e, evolutions[e], longest, ox0 + ox1, oy0 + oy1 * 2 + last)
+                last = get_height(evolutions[e]) - 2
+
+    draw(chain.keys()[0], chain.values()[0], 0, 0, 0)

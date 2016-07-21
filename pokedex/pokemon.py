@@ -19,7 +19,7 @@ class Pokemon(object):
             self.genus  = "???"
             self.flavor = u"Pokémon %s not found" % pokemon
             self.types  = ["flying", "normal"]
-            self.chain  = [(0, "MISSINGNO.")]
+            self.chain  = {(0, "MISSINGNO."): {}}
             self.height = 10
             self.weight = 100
         else:

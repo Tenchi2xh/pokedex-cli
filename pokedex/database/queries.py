@@ -71,11 +71,25 @@ def get_pokemon_type(pokemon_id):
 
 
 def get_pokemon_evolution_chain(pokemon_id, language=default_language):
-    cursor.execute("""SELECT id
+    cursor.execute("""SELECT id, evolves_from_species_id
                         FROM pokemon_species
                        WHERE evolution_chain_id = (SELECT evolution_chain_id FROM pokemon_species WHERE id={pokemon_id})
                    """.format(pokemon_id=pokemon_id))
-    return [(row[0], get_pokemon_name(row[0], language)) for row in cursor.fetchall()]
+    chain = [(row[0], get_pokemon_name(row[0], language), row[1]) for row in cursor.fetchall()]
+    root = (pkmn for pkmn in chain if pkmn[2] is None).next()
+    tree = {root: {}}
+    del chain[chain.index(root)]
+
+    def add_evolutions(tree, root, chain):
+        evolutions = [pkmn for pkmn in chain if pkmn[2] == root[0]]
+        for evolution in evolutions:
+            tree[root][evolution] = {}
+            del chain[chain.index(evolution)]
+            add_evolutions(tree[root], evolution, chain)
+
+    add_evolutions(tree, root, chain)
+
+    return tree
 
 
 def get_pokedex_entry(id, language=default_language, version=default_version):
