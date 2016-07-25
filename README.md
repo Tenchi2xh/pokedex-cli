@@ -15,6 +15,8 @@ The Pocket Monster Index, now in your terminal!
 pip install "git+git://github.com/Tenchi2xh/pokedex-cli.git@v0.1.4#egg=pokedex-cli"
 ```
 
+For the best output quality, please adjust the vertical line spacing in your terminal emulator until the block characters connect.
+
 ## Usage
 
 ```
