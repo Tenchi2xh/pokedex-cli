@@ -135,4 +135,4 @@ def draw_evolutions(buffer, chain, number, x0=0, y0=0, bg=-1):
                 draw(e, evolutions[e], longest, ox0 + ox1, oy0 + oy1 * 2 + last)
                 last = get_height(evolutions[e]) - 2
 
-    draw(chain.keys()[0], chain.values()[0], 0, 0, 0)
+    draw(list(chain.keys())[0], list(chain.values())[0], 0, 0, 0)

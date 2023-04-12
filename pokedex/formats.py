@@ -11,7 +11,7 @@ format_names = ["card", "json", "simple", "line", "page"]
 
 def card(pokemon, shiny=False, mega=False):
 
-    evolutions_height = get_height(pokemon.chain.values()[0])
+    evolutions_height = get_height(list(pokemon.chain.values())[0])
     evolutions_width = get_width(pokemon.chain)
     content_width = max([evolutions_width, len(pokemon.genus) + 3 + 8 + 12, 32])
 
@@ -31,8 +31,8 @@ def card(pokemon, shiny=False, mega=False):
     buffer.put_line((3, 2), u"%s Pokémon" % pokemon.genus.capitalize(), fg=245, bg=0)
     buffer.put_line((3, 3), "%0.2f m / %0.1f kg" % (pokemon.height / 10.0, pokemon.weight / 10.0), fg=240, bg=0)
 
-    type1 = pokemon.types[0]
-    type2 = pokemon.types[1] if len(pokemon.types) > 1 else None
+    type1 = list(pokemon.types)[0]
+    type2 = list(pokemon.types)[1] if len(list(pokemon.types)) > 1 else None
 
     draw_number(buffer, pokemon.number, bg=0, x0=content_width-12, y0=1)
     draw_type(buffer, type1, type2, x0=3, y0=5)

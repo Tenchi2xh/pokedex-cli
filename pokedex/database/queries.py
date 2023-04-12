@@ -76,7 +76,7 @@ def get_pokemon_evolution_chain(pokemon_id, language=default_language):
                        WHERE evolution_chain_id = (SELECT evolution_chain_id FROM pokemon_species WHERE id={pokemon_id})
                    """.format(pokemon_id=pokemon_id))
     chain = [(row[0], get_pokemon_name(row[0], language), row[1]) for row in cursor.fetchall()]
-    root = (pkmn for pkmn in chain if pkmn[2] is None).next()
+    root = (pkmn for pkmn in chain if pkmn[2] is None).__next__()
     tree = {root: {}}
     del chain[chain.index(root)]
 
